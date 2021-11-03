@@ -17,27 +17,6 @@ args<-commandArgs(trailingOnly=TRUE)
 source(paste0(PATH,"permtest_v304_final.R"))
 source(paste0(PATH,"WQSSim.R"))
 
-pval_from_cis<-function(lci,uci,p=2,n=500,split=F,df=NULL){
-  if(is.null(df)){
-    if(split==T){df<-(n*0.6)-p
-    } else {df<-n-p}
-  }
-  pval<-c()
-  for(i in 1:length(lci)){
-    se<-(uci[i]-lci[i])/(2*qt(0.975,df))
-    mu<-mean(c(uci[i],lci[i]))
-    pval[i]<-2*pt(-abs(mu/se),df=df)
-  }
-  return(pval)
-}
-
-confint.qt<-function(beta,se,DF,IQR=1,level=0.95){
-  ci.lower<-(beta*IQR)-((se*IQR)*qt(((level/2)+0.5), DF))
-  ci.upper<-(beta*IQR)+((se*IQR)*qt(((level/2)+0.5), DF))
-  CIs<-data.frame(CIL=ci.lower,CIU=ci.upper)
-  return(CIs)
-}
-
 mytruegammas<-c(-0.63,0.18,-0.84,1.60,0.33,rep(0,5))
 
 Sim_JustPT<-function(simwide_b1pos=T,nmixs=10,ptruewts=1,nobss=500,ncovrts=10,ptruecovrts=0.5,

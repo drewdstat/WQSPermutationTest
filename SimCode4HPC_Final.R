@@ -282,7 +282,7 @@ Sim_JustPT<-function(simwide_b1pos=T,nmixs=10,ptruewts=1,nobss=500,ncovrts=10,pt
     rep.hold<-tryCatch({
       gwqsrh(formula=formula(paste0("y~wqs+",paste(paste0("C",1:10),collapse="+"))),
                mix_name=names(newsim$Data)[grep("T",names(newsim$Data))],
-               data=newsim$Data,na.action=na.exclude,q=nq,validation=0.6,b=nrs,rs=F,
+               data=newsim$Data,na.action=na.exclude,q=nq,validation=0.6,b=boots,rs=F,
                plan_strategy=myplan,b1_pos=simwide_b1pos,rh=rh.nrep)
     },error=function(e) NULL)
     rep.hold2<-tryCatch({
@@ -296,7 +296,7 @@ Sim_JustPT<-function(simwide_b1pos=T,nmixs=10,ptruewts=1,nobss=500,ncovrts=10,pt
   } else if(rephold.wqs==T&rephold.wqsrs==F){
     rep.hold<-tryCatch({
       gwqsrh(formula=form1,mix_name=names(newsim$Data)[grep("T",names(newsim$Data))],
-               data=newsim$Data,na.action=na.exclude,q=nq,validation=0.6,b=nrs,rs=F,
+               data=newsim$Data,na.action=na.exclude,q=nq,validation=0.6,b=boots,rs=F,
                plan_strategy=myplan,b1_pos=simwide_b1pos,rh=rh.nrep)
     },error=function(e) NULL)
     myout<-rbind(myout,processrh(rep.hold))

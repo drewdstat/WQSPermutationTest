@@ -278,33 +278,38 @@ Sim_JustPT<-function(simwide_b1pos=T,nmixs=10,ptruewts=1,nobss=500,ncovrts=10,pt
     return(outmat)
   }
   
+  #Note: internal environment setting disallows gwqsrh from pulling variable-based numbers of bootstraps/random subsets
+  #  from outside of the function call, so I must define b=100 here instead of b=boots or b=nrs as above. The same holds
+  #  true for defining rh with rh.nrep, b1_pos with simwide_b1pos, q=nq, etc. Instead, all must be directly defined in the
+  #  function call since the function switches up the environment early on in its processes, thus losing the definitions
+  #  for those variables. It is a limitation of gwqsrh that I cannot get around without rewriting the function.
   if(rephold.wqs==T&rephold.wqsrs==T){
     rep.hold<-tryCatch({
       gwqsrh(formula=formula(paste0("y~wqs+",paste(paste0("C",1:10),collapse="+"))),
                mix_name=names(newsim$Data)[grep("T",names(newsim$Data))],
-               data=newsim$Data,na.action=na.exclude,q=nq,validation=0.6,b=boots,rs=F,
-               plan_strategy=myplan,b1_pos=simwide_b1pos,rh=rh.nrep)
+               data=newsim$Data,na.action=na.exclude,q=5,validation=0.6,b=100,rs=F,
+               plan_strategy="multicore",b1_pos=T,rh=100)
     },error=function(e) NULL)
     rep.hold2<-tryCatch({
       gwqsrh(formula=formula(paste0("y~wqs+",paste(paste0("C",1:10),collapse="+"))),
                mix_name=names(newsim$Data)[grep("T",names(newsim$Data))],
-               data=newsim$Data,na.action=na.exclude,q=nq,validation=0.6,b=nrs,rs=T,
-               plan_strategy=myplan,b1_pos=simwide_b1pos,rh=rh.nrep)
+               data=newsim$Data,na.action=na.exclude,q=5,validation=0.6,b=100,rs=T,
+               plan_strategy="multicore",b1_pos=T,rh=100)
     },error=function(e) NULL)
     myout<-rbind(myout,processrh(rep.hold))
     myout<-rbind(myout,processrh(rep.hold2,modelname="WQSRS_RH"))
   } else if(rephold.wqs==T&rephold.wqsrs==F){
     rep.hold<-tryCatch({
       gwqsrh(formula=form1,mix_name=names(newsim$Data)[grep("T",names(newsim$Data))],
-               data=newsim$Data,na.action=na.exclude,q=nq,validation=0.6,b=boots,rs=F,
-               plan_strategy=myplan,b1_pos=simwide_b1pos,rh=rh.nrep)
+               data=newsim$Data,na.action=na.exclude,q=5,validation=0.6,b=100,rs=F,
+               plan_strategy="multicore",b1_pos=T,rh=100)
     },error=function(e) NULL)
     myout<-rbind(myout,processrh(rep.hold))
   } else if(rephold.wqs==F&rephold.wqsrs==T){
     rep.hold2<-tryCatch({
       gwqsrh(formula=form1,mix_name=names(newsim$Data)[grep("T",names(newsim$Data))],
-               data=newsim$Data,na.action=na.exclude,q=nq,validation=0.6,b=nrs,rs=T,
-               plan_strategy=myplan,b1_pos=simwide_b1pos,rh=rh.nrep)
+               data=newsim$Data,na.action=na.exclude,q=5,validation=0.6,b=100,rs=T,
+               plan_strategy="multicore",b1_pos=T,rh=100)
     },error=function(e) NULL)
     myout<-rbind(myout,processrh(rep.hold2,modelname="WQSRS_RH"))
   }

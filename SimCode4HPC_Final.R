@@ -15,7 +15,7 @@ args<-commandArgs(trailingOnly=TRUE)
 # ---------------------------------------------------------------------------------------------------------
 
 source(paste0(PATH,"permtest_v304_final.R"))
-source(paste0(PATH,"WQSSim.R"))
+source(paste0(PATH,"WQSsim.R"))
 
 mytruegammas<-c(-0.63,0.18,-0.84,1.60,0.33,rep(0,5))
 

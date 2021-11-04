@@ -133,9 +133,11 @@ Sim_JustPT<-function(simwide_b1pos=T,nmixs=10,ptruewts=1,nobss=500,ncovrts=10,pt
       outmat$Error<-outmat$mean-outmat$True_value
       outmat$False_positive<-ifelse(outmat$True_value==0&
                                       outmat$CI_2.5<0&outmat$CI_97.5<0,1,
-                                    ifelse(outmat$True_value==0&outmat$CI_2.5>0&outmat$CI_97.5>0,1,0))
+                                    ifelse(outmat$True_value==0&outmat$CI_2.5>0&outmat$CI_97.5>0,1,
+                                           ifelse(is.na(outmat$CI_2.5),NA,0)))
       outmat$False_negative<-ifelse(outmat$True_value!=0&
-                                      outmat$CI_2.5<0&outmat$CI_97.5>0,1,0)
+                                      outmat$CI_2.5<0&outmat$CI_97.5>0,1,
+                                    ifelse(is.na(outmat$CI_2.5),NA,0))
       return(outmat)
     }
     qgcextract1<-extract_qgc(qgc.nb,simdat=newsim,qgcmodname="QGC_Noboot")
@@ -144,16 +146,16 @@ Sim_JustPT<-function(simwide_b1pos=T,nmixs=10,ptruewts=1,nobss=500,ncovrts=10,pt
   }
   
   newwqs<-tryCatch(
-    mygwqs(formula=form1,mix_name=names(newsim$Data)[grep("T",names(newsim$Data))],data=newsim$Data,na.action=na.exclude,q=nq,validation=0,b=boots,plan_strategy=myplan,b1_pos=simwide_b1pos),
+    gwqs(formula=form1,mix_name=names(newsim$Data)[grep("T",names(newsim$Data))],data=newsim$Data,na.action=na.exclude,q=nq,validation=0,b=boots,plan_strategy=myplan,b1_pos=simwide_b1pos),
     error=function(e) NULL)
   newwqs2<-tryCatch(
-    mygwqs(formula=form1,mix_name=names(newsim$Data)[grep("T",names(newsim$Data))],data=newsim$Data,na.action=na.exclude,q=nq,validation=0.6,b=boots,plan_strategy=myplan,b1_pos=simwide_b1pos),
+    gwqs(formula=form1,mix_name=names(newsim$Data)[grep("T",names(newsim$Data))],data=newsim$Data,na.action=na.exclude,q=nq,validation=0.6,b=boots,plan_strategy=myplan,b1_pos=simwide_b1pos),
     error=function(e) NULL)
   newwqs3<-tryCatch(
-    mygwqs(formula=form1,mix_name=names(newsim$Data)[grep("T",names(newsim$Data))],data=newsim$Data,na.action=na.exclude,q=nq,validation=0,b=nrs,rs=T,plan_strategy=myplan,b1_pos=simwide_b1pos),
+    gwqs(formula=form1,mix_name=names(newsim$Data)[grep("T",names(newsim$Data))],data=newsim$Data,na.action=na.exclude,q=nq,validation=0,b=nrs,rs=T,plan_strategy=myplan,b1_pos=simwide_b1pos),
     error=function(e) NULL)
   newwqs4<-tryCatch(
-    mygwqs(formula=form1,mix_name=names(newsim$Data)[grep("T",names(newsim$Data))],data=newsim$Data,na.action=na.exclude,q=nq,validation=0.6,b=nrs,rs=T,plan_strategy=myplan,b1_pos=simwide_b1pos),
+    gwqs(formula=form1,mix_name=names(newsim$Data)[grep("T",names(newsim$Data))],data=newsim$Data,na.action=na.exclude,q=nq,validation=0.6,b=nrs,rs=T,plan_strategy=myplan,b1_pos=simwide_b1pos),
     error=function(e) NULL)
   #save.image(file="IntermediateSimCode4HPC_FinalCheck.RData") pick up here
   WQSoutput<-function(model,sim,pt=T,modtype="WQS_Nosplit",pt.nr,bts,RS=F,bplus=T){

@@ -6,7 +6,6 @@ library(mvtnorm)
 library(extraDistr)
 library(ggplot2)
 library(pbapply)
-library(rstan)
 library(plyr)
 library(dplyr)
 library(gWQS)
@@ -355,18 +354,18 @@ Sim_JustPT<-function(simwide_b1pos=T,nmixs=10,ptruewts=1,nobss=500,ncovrts=10,pt
 
 #True beta1 = 0.3, Predictor Correlation = Uncorrelated
 WQSPTsim1<-Sim_JustPT(truewqsbeta=0.3,corrstructs=0)
-save(WQSPTsim1,file=paste0(PATH,"WQSPTsim1_NewPkgVersUncorrNZ_",args[1],".RData"))
+save(WQSPTsim1,file=paste0(PATH,"WQSPTsim1_UncorrNZ_",args[1],".RData"))
 
 #True beta1 = 0, Predictor Correlation = Uncorrelated
 WQSPTsim1<-Sim_JustPT(truewqsbeta=0,corrstructs=0)
-save(WQSPTsim1,file=paste0(PATH,"WQSPTsim1_NewPkgVersUncorrNZ_",args[1],".RData"))
+save(WQSPTsim1,file=paste0(PATH,"WQSPTsim1_UncorrNZ_",args[1],".RData"))
 
 #True beta1 = 0.2, Predictor Correlation = Real Variance-Covariance Matrix
 load(paste0(PATH,"examplephxvcov.RData")) #derived from TIDES cohort data (see Methods)
 WQSPTsim1<-Sim_JustPT(truewqsbeta=0.2,corrstructs=cov2cor(examplephxvcov))
-save(WQSPTsim1,file=paste0(PATH,"WQSPTsim1_NewPkgVersUncorrNZ_",args[1],".RData"))
+save(WQSPTsim1,file=paste0(PATH,"WQSPTsim1_UncorrNZ_",args[1],".RData"))
 
 #True beta1 = 0, Predictor Correlation = Real Variance-Covariance Matrix
 WQSPTsim1<-Sim_JustPT(truewqsbeta=0,corrstructs=cov2cor(examplephxvcov))
-save(WQSPTsim1,file=paste0(PATH,"WQSPTsim1_NewPkgVersCorrZ_",args[1],".RData"))
+save(WQSPTsim1,file=paste0(PATH,"WQSPTsim1_CorrZ_",args[1],".RData"))
 

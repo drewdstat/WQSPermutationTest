@@ -172,7 +172,7 @@ Sim_JustPT<-function(simwide_b1pos=T,nmixs=10,ptruewts=1,nobss=500,ncovrts=10,pt
       #outmat$Error<-0-outmat$True_value
       if(pt){
         outmat2<-outmat
-        if(RS){outmat2$Model<-"WQSRS_PT"} else {outmat2$Model<-"WQS_PT"}
+        if(RS){outmat2$Model<-"WQSRS_PT"} else {outmat2$Model<-"WQSBS_PT"}
         outmat<-rbind(outmat,outmat2)
         betamat<-NULL
       }
@@ -205,7 +205,7 @@ Sim_JustPT<-function(simwide_b1pos=T,nmixs=10,ptruewts=1,nobss=500,ncovrts=10,pt
         } else {
           newPT<-perm.test(model,niter=pt.nr,b1pos=bplus,boots=bts)
           outmat2<-outmat
-          outmat2$Model<-"WQS_PT"
+          outmat2$Model<-"WQSBS_PT"
           outmat2[2,"p-value"]<-newPT$pval
           outmat<-rbind(outmat,outmat2)
           betamat<-newPT$betas
@@ -248,7 +248,7 @@ Sim_JustPT<-function(simwide_b1pos=T,nmixs=10,ptruewts=1,nobss=500,ncovrts=10,pt
   myout<-rbind(myout,WQSoutput(model=newwqs4,sim=newsim,pt=F,modtype="WQSRS_Split",pt.nr=0,
                                bts=nrs,RS=T,bplus=simwide_b1pos))
   
-  processrh<-function(rhmodel,modelname="WQS_RH"){
+  processrh<-function(rhmodel,modelname="WQSBS_RH"){
     if(is.null(rhmodel)){
       outmat<-data.frame(Model=modelname,
                          Parameter=c("beta0","beta1",paste0("gamma",1:ncovrts),paste0("T",1:nmixs)),

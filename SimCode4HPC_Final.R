@@ -158,7 +158,7 @@ Sim_JustPT<-function(simwide_b1pos=T,nmixs=10,ptruewts=1,nobss=500,ncovrts=10,pt
     gwqs(formula=form1,mix_name=names(newsim$Data)[grep("T",names(newsim$Data))],data=newsim$Data,na.action=na.exclude,q=nq,validation=0.6,b=nrs,rs=T,plan_strategy=myplan,b1_pos=simwide_b1pos),
     error=function(e) NULL)
   #save.image(file="IntermediateSimCode4HPC_FinalCheck.RData") pick up here
-  WQSoutput<-function(model,sim,pt=T,modtype="WQS_Nosplit",pt.nr,bts,RS=F,bplus=T){
+  WQSoutput<-function(model,sim,pt=T,modtype="WQSBS_Nosplit",pt.nr,bts,RS=F,bplus=T){
     if(is.null(model)|is.null(model$final_weights)){
       outmat<-as.data.frame(matrix(NA,(length(sim$coef)+nrow(sim$weights)),12))
       names(outmat)<-c("Model","Parameter","True_value","mean","CI_2.5","CI_97.5","p-value",
@@ -229,13 +229,13 @@ Sim_JustPT<-function(simwide_b1pos=T,nmixs=10,ptruewts=1,nobss=500,ncovrts=10,pt
   }
   
   if(wqsPT==T){
-    wout1<-WQSoutput(model=newwqs,sim=newsim,pt=T,modtype="WQS_Nosplit",pt.nr=pt.nrep,bts=boots,bplus=simwide_b1pos)
+    wout1<-WQSoutput(model=newwqs,sim=newsim,pt=T,modtype="WQSBS_Nosplit",pt.nr=pt.nrep,bts=boots,bplus=simwide_b1pos)
     myout<-wout1$Table
-    WQSPTBetas<-wout1$Betas
+    WQSBSPTBetas<-wout1$Betas
   } else {
-    myout<-WQSoutput(model=newwqs,sim=newsim,pt=F,modtype="WQS_Nosplit",pt.nr=pt.nrep,bts=boots,bplus=simwide_b1pos)
+    myout<-WQSoutput(model=newwqs,sim=newsim,pt=F,modtype="WQSBS_Nosplit",pt.nr=pt.nrep,bts=boots,bplus=simwide_b1pos)
   }
-  myout<-rbind(myout,WQSoutput(model=newwqs2,sim=newsim,pt=F,modtype="WQS_Split",pt.nr=0,bts=boots,bplus=simwide_b1pos))
+  myout<-rbind(myout,WQSoutput(model=newwqs2,sim=newsim,pt=F,modtype="WQSBS_Split",pt.nr=0,bts=boots,bplus=simwide_b1pos))
   if(wqsrsPT==T){
     wout2<-WQSoutput(model=newwqs3,sim=newsim,pt=T,modtype="WQSRS_Nosplit",pt.nr=pt.nrep,
                      bts=nrs,RS=T,bplus=simwide_b1pos)
@@ -337,9 +337,9 @@ Sim_JustPT<-function(simwide_b1pos=T,nmixs=10,ptruewts=1,nobss=500,ncovrts=10,pt
   
   outlist<-list(Table=myout)
   if(wqsPT){
-    outlist[["WQSPTBetas"]]<-WQSPTBetas
+    outlist[["WQSBSPTBetas"]]<-WQSBSPTBetas
   } else {
-    outlist[["WQSPTBetas"]]<-NULL
+    outlist[["WQSBSPTBetas"]]<-NULL
   }
   if(wqsrsPT){
     outlist[["WQSRSPTBetas"]]<-WQSRSPTBetas

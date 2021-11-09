@@ -4,7 +4,7 @@ perm.test<-function(model,niter=200,boots=200,b1pos=T,RS=F,myplan="multicore",
   
   if(class(model)=="gwqs"){
     mm<-model$fit
-    Data<-model$data[model$vindex,-which(names(model$data)%in%c("wqs","wghts"))]
+    Data<-model$data[model$vindex,-which(names(model$data)%in%c("wqs"))]
     modclass<-"gwqs"
     if(!is.null(model$qi)){
       nq<-max(sapply(model$qi,length))-1
@@ -24,10 +24,10 @@ perm.test<-function(model,niter=200,boots=200,b1pos=T,RS=F,myplan="multicore",
                     data=Data)
     partial.yhat<-predict(fit.partial)
     partial.resid<-resid(fit.partial)
-    reorgmat<-matrix(NA,dim(Data)[1],niter)
+    reorgmat<-matrix(NA,nrow(Data),niter)
     reorgmat<-apply(reorgmat,2,function(x) partial.yhat+sample(partial.resid,replace=F))
   } else {
-    reorgmat<-matrix(NA,dim(Data)[1],niter)
+    reorgmat<-matrix(NA,nrow(Data),niter)
     reorgmat<-apply(reorgmat,2,function(x) sample(Data[,yname])) 
   }
   getbetas<-function(x){ 

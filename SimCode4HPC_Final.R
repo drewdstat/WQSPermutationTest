@@ -157,7 +157,7 @@ Sim_JustPT<-function(simwide_b1pos=T,nmixs=10,ptruewts=1,nobss=500,ncovrts=10,pt
   newwqs4<-tryCatch(
     gwqs(formula=form1,mix_name=names(newsim$Data)[grep("T",names(newsim$Data))],data=newsim$Data,na.action=na.exclude,q=nq,validation=0.6,b=nrs,rs=T,plan_strategy=myplan,b1_pos=simwide_b1pos),
     error=function(e) NULL)
-  #save.image(file="IntermediateSimCode4HPC_FinalCheck.RData") pick up here
+  
   WQSoutput<-function(model,sim,pt=T,modtype="WQSBS_Nosplit",pt.nr,bts,RS=F,bplus=T){
     if(is.null(model)|is.null(model$final_weights)){
       outmat<-as.data.frame(matrix(NA,(length(sim$coef)+nrow(sim$weights)),12))

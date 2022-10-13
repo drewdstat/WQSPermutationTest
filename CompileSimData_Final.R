@@ -1,6 +1,6 @@
 #!/usr/local/bin/Rscript
 
-PATH<-"/active/sathyanarayana_s/Lab_Members/DrewDay/WQS_Sim/"
+PATH<-"/MyFolder/" #Put your own file path here
 
 load(paste0(PATH,"WQSPTsim1_FinalPublic_1.RData"))
 
@@ -40,7 +40,7 @@ AllPTbetas<-as.data.frame(rbind(cbind(unique(WQSPTsim1new$Seed),"WQSBS_PT",WQSPT
                                 cbind(unique(WQSPTsim1new$Seed),"WQSRS_PT",WQSPTsim1$WQSRSPTBetas)))
 names(AllPTbetas)<-c("Seed","Model","Permuted_beta1")
 
-for(i in c(2:5)){
+for(i in c(2:500)){
   print(i)
   load(paste0(PATH,"WQSPTsim1_FinalPublic_",i,".RData"))
   WQSPTsim1temp<-WQSPTsim1$Table
